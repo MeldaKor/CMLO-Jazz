@@ -83,17 +83,29 @@ def play_a_measure()
         # else:
         #     pass 
 
-        for j = 0 to cur_beats_per_measure
-            octave = get_oct()
-            for i=0 to 12:
-                if cur_chord[i]
-                    sched_cause(j, midi_out, 'note', 1, octave*12 + i, 127, 1/cur_bps)
+        decider = int(random()+0.5)
+        if decider == 0
+            for j = 0 to (cur_beats_per_measure * 2)
+                octave = get_oct()
+                for i=0 to 12:
+                    if cur_chord[i]
+                        sched_cause(0.5 * j, midi_out, 'note', 1, 36 + this_chord[j % len(this_chord)], 45, 0.5)
+
+        else:
+            for j = 0 to cur_beats_per_measure
+                midi_out.note_on(0, 72 + cur_bass,0)
+                octave = get_oct()
+                for i=0 to 12:
+                    if cur_chord[i]
+                        sched_cause(j+0.5, midi_out, 'note', 1, octave*12 + i, 65, random())
+                midi_out.note_on(0, 72 + cur_bass,65)
 
 def get_oct():
     display "getting octave"
     prob_array = [0.05, 0.05, 0.1, 0.4, 0.2, 0.1, 0.05, 0.05]
     rando = pr_weighted_choice(prob_array)
     return rando
+
 
 
 
